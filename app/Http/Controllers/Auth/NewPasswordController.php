@@ -35,7 +35,7 @@ class NewPasswordController extends Controller
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->string('password')),
-                    'remember_token' => Str::random(60),
+                    // 'remember_token' => Str::random(60),
                 ])->save();
 
                 event(new PasswordReset($user));
@@ -43,9 +43,7 @@ class NewPasswordController extends Controller
         );
 
         if ($status != Password::PASSWORD_RESET) {
-            throw ValidationException::withMessages([
-                'email' => [__($status)],
-            ]);
+            return response()->json(['error' => __($status)], 400);
         }
 
         return response()->json(['status' => __($status)]);

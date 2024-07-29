@@ -29,11 +29,15 @@ class PasswordResetLinkController extends Controller
         );
 
         if ($status != Password::RESET_LINK_SENT) {
-            throw ValidationException::withMessages([
-                'email' => [__($status)],
-            ]);
+            // throw ValidationException::withMessages([
+            //     'email' => [__($status)],
+            // ]);
+
+            return response()->json([
+                'error' => __('Unable to send reset link.')
+            ], 400);
         }
 
-        return response()->json(['status' => __($status)]);
+        return response()->json(['status' => __('Password reset link sent.')], 200);
     }
 }
